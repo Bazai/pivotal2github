@@ -21,6 +21,8 @@ user = get_input("Enter Username >")
 password = get_input("Enter Password >", "*")
 GitHub.basic_auth user, password
 
+repository_path = get_input("Enter Repository Path (e.g. user/repository-name) >")
+raise "Repository should contain a forward slash ('/')" unless repository_path =~ /\w\/\w/
 
 visited_labels = []
 CSV.open filename, :headers => true do |csv|
@@ -47,7 +49,7 @@ CSV.open filename, :headers => true do |csv|
         # this hack doesn't care if you have an existing label - it just errors and moves on like a zen master
         # the server however is expected to be equally zen :D
         visited_labels << label[:name]
-        label = GitHub.post '/repos/your_github_username/your_repository_name/labels', :body => JSON.generate(label)
+        label = GitHub.post "/repos/#{repository_path}/labels", :body => JSON.generate(label)
         p label
       end
     end
@@ -56,14 +58,14 @@ CSV.open filename, :headers => true do |csv|
 
    
     p json_body = JSON.generate(body)
-    issue = GitHub.post '/repos/your_github_username/your_repository_name/issues', :body => json_body
+    issue = GitHub.post "/repos/#{repository_path}/issues", :body => json_body
     p issue
 
     r.each do |f|
       if f[0] == 'Note'
         next unless f[1]
         body = { :body => f[1] }
-        GitHub.post "/repos/Bazai/your_github_username/your_repository_name/#{issue.parsed_response['number']}/comments", :body => JSON.generate(body)
+        GitHub.post "/repos/Bazai/#{repository_path}/#{issue.parsed_response['number']}/comments", :body => JSON.generate(body)
       end
     end
   end
