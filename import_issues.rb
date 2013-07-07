@@ -65,7 +65,7 @@ CSV.open filename, :headers => true do |csv|
       if f[0] == 'Note'
         next unless f[1]
         body = { :body => f[1] }
-        GitHub.post "/repos/Bazai/#{repository_path}/#{issue.parsed_response['number']}/comments", :body => JSON.generate(body)
+        GitHub.post "/repos/#{repository_path}/#{issue.parsed_response['number']}/comments", :body => JSON.generate(body)
       end
     end
   end
