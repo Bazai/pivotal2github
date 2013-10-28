@@ -33,6 +33,14 @@ CSV.open filename, :headers => true do |csv|
     }
     labels = []
 
+    # Give bugs the "bug" label.
+    if r['Story Type'] == 'bug'
+      if r['Labels'] != ''
+        r['Labels'] += ','
+      end
+      r['Labels'] += 'bug'
+    end
+
     if r['Labels'] != ''
       r['Labels'].split(',').each do |label|
         label = label.strip
