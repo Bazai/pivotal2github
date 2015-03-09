@@ -28,7 +28,7 @@ visited_labels = []
 CSV.open filename, :headers => true do |csv|
   csv.each do |r|
     body = {
-      :title => r['Story'],
+      :title => r['Title'],
       :body => r['Description'],
     }
     labels = []
